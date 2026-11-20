@@ -450,14 +450,15 @@ src/
 │  └─ api/                          auth/otp/*, upload/[kind], files/[kind]/[id],
 │                                   watch/[kind]/[id], heartbeat
 ├─ server/
-│  ├─ db.ts · access.ts · time.ts (Asia/Colombo helpers)
+│  ├─ db.ts · access.ts
 │  ├─ auth/        otp.ts, session.ts, guards.ts, stepup.ts
 │  ├─ services/    payments, entitlements, content, quiz, attendance, announcements, reports
 │  ├─ sms/         provider.ts, mock.ts
 │  ├─ storage/     local.ts, s3.ts
 │  └─ pdf/stamp.ts
 ├─ components/  ui/, layout/, player/, quiz/, payments/, papers/
-├─ lib/         phone.ts, nic.ts, csv.ts (formula-injection safe), validators/
+├─ lib/         time.ts (Asia/Colombo helpers; here, not server/, because client countdowns use them),
+│               phone.ts, nic.ts, csv.ts (formula-injection safe), validators/
 └─ messages/    en.json, si.json
 worker/   index.ts (jobs)
 prisma/   schema.prisma, migrations/, seed.ts
