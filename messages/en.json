@@ -1,0 +1,12 @@
+{
+  "common": {
+    "appName": "A/L LMS",
+    "language": "Language",
+    "english": "English",
+    "sinhala": "සිංහල"
+  },
+  "home": {
+    "title": "Learn A/L the smart way",
+    "cta": "Get started"
+  }
+}
