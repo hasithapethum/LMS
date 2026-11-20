@@ -16,7 +16,7 @@ datasource db {
 model Setting {
   key       String   @id
   value     Json
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   @@map("settings")
 }

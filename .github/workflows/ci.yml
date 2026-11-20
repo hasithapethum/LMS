@@ -23,9 +23,7 @@ jobs:
           --health-retries 20
     env:
       DATABASE_URL: postgresql://lms:lms@localhost:5432/lms_test
-      # Integration tests also assert the session time zone, set per connection here
-      # because service containers cannot take a `command:` override.
-      DATABASE_URL_TEST: postgresql://lms:lms@localhost:5432/lms_test?options=-c%20TimeZone%3DAsia/Colombo
+      DATABASE_URL_TEST: postgresql://lms:lms@localhost:5432/lms_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

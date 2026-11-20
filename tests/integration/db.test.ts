@@ -15,8 +15,22 @@ describe('database round-trip', () => {
     expect(row.value).toEqual(value);
   });
 
-  it('runs with the database session in Asia/Colombo', async () => {
-    const [{ tz }] = await db.$queryRaw<{ tz: string }[]>`SELECT current_setting('TimeZone') AS tz`;
-    expect(tz).toBe('Asia/Colombo');
+  // Prisma's pg adapter rewrites every timestamptz offset to +00:00, so the session must be UTC
+  // or every instant shifts by the session offset (5½ h for Asia/Colombo).
+  it('reads a timestamptz instant back exactly', async () => {
+    const [{ t }] = await db.$queryRaw<{ t: Date }[]>`SELECT '2026-12-01 03:00+05:30'::timestamptz AS t`;
+    expect(t.toISOString()).toBe('2026-11-30T21:30:00.000Z');
+  });
+
+  it('database now() agrees with the app clock', async () => {
+    const [{ t }] = await db.$queryRaw<{ t: Date }[]>`SELECT now() AS t`;
+    expect(Math.abs(t.getTime() - Date.now())).toBeLessThan(60_000);
+  });
+
+  it('stores updatedAt as the real instant', async () => {
+    const row = await db.setting.update({ where: { key: 'm0.test' }, data: { value } });
+    expect(Math.abs(row.updatedAt.getTime() - Date.now())).toBeLessThan(60_000);
+    const [{ t }] = await db.$queryRaw<{ t: Date }[]>`SELECT "updatedAt" AS t FROM settings WHERE key = 'm0.test'`;
+    expect(Math.abs(t.getTime() - Date.now())).toBeLessThan(60_000);
   });
 });

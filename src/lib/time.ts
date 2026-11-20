@@ -97,13 +97,14 @@ export function formatInColombo(
   options: Intl.DateTimeFormatOptions,
 ): string {
   const formatter = new Intl.DateTimeFormat(INTL_LOCALE[locale], { ...options, timeZone: APP_TIME_ZONE });
-  const textMonth = options.month === 'long' || options.month === 'short';
-  if (locale !== 'si' || !textMonth) return formatter.format(instant);
+  if (locale !== 'si') return formatter.format(instant);
 
+  // Any text month (month: long/short/narrow, or dateStyle full/long/medium) comes from SI_MONTHS;
+  // numeric months (e.g. dateStyle short) are left as they are.
   const monthIndex = new TZDate(instant.getTime(), APP_TIME_ZONE).getMonth();
   return formatter
     .formatToParts(instant)
-    .map((part) => (part.type === 'month' ? SI_MONTHS[monthIndex] : part.value))
+    .map((part) => (part.type === 'month' && !/^\d+$/.test(part.value) ? SI_MONTHS[monthIndex] : part.value))
     .join('');
 }
 

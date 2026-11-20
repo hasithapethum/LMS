@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { setLocale } from '@/app/actions/locale';
@@ -14,13 +15,13 @@ export function LanguageToggle() {
   const active = useLocale() as AppLocale;
   const t = useTranslations('common');
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const choose = (next: AppLocale) => {
     if (next === active) return;
     startTransition(async () => {
       await setLocale(next);
-      // The locale is a root segment (rewritten by proxy.ts), so a full reload swaps the root layout.
-      window.location.reload();
+      router.refresh();
     });
   };
 

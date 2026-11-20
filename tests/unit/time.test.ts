@@ -82,6 +82,15 @@ describe('formatInColombo', () => {
   it('Sinhala full date uses the common Gregorian month name', () =>
     expect(formatInColombo(dec1, 'si', { day: 'numeric', month: 'long', year: 'numeric' }))
       .toBe('2026 දෙසැම්බර් 1'));
+  it.each(['full', 'long', 'medium'] as const)('Sinhala dateStyle %s uses the common month name', (dateStyle) => {
+    const text = formatInColombo(dec1, 'si', { dateStyle });
+    expect(text).toContain('දෙසැම්බර්');
+    expect(text).not.toContain('උඳුවප්');
+  });
+  it('Sinhala dateStyle short stays numeric', () =>
+    expect(formatInColombo(dec1, 'si', { dateStyle: 'short' })).toBe('2026-12-01'));
+  it('Sinhala narrow month uses the common month name', () =>
+    expect(formatInColombo(dec1, 'si', { month: 'narrow' })).toBe('දෙසැම්බර්'));
   it('Sinhala April keeps its zero-width joiner', () =>
     expect(formatInColombo(at('2026-04-15T00:00:00Z'), 'si', { month: 'short' })).toBe('අප්‍රේල්'));
 });

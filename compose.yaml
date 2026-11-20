@@ -3,7 +3,6 @@ name: al-lms
 services:
   postgres:
     image: postgres:17-alpine
-    command: ["postgres", "-c", "timezone=Asia/Colombo"]
     environment:
       POSTGRES_USER: lms
       POSTGRES_PASSWORD: lms

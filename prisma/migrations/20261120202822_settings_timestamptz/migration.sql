@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "settings" ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMPTZ(3);
