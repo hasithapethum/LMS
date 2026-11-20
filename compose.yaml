@@ -20,5 +20,18 @@ services:
       timeout: 3s
       retries: 20
 
+  # Production-style app container: `docker compose --profile prod up -d --build app`
+  app:
+    profiles: [prod]
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://lms:lms@postgres:5432/lms
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
+
 volumes:
   pgdata:
